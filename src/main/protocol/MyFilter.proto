@@ -1,0 +1,12 @@
+option java_package = "com.xzp.utils.filters";
+option java_outer_classname = "MyFilter";
+
+message SpatialFilter {
+    required string columnFamily = 1;
+    required string columnQualifier = 2;
+    required string value = 3;
+    required bool foundColumn = 4;
+    required bool matchedColumn = 5;
+    required bool filterIfMissing = 6;
+    required bool latestVersionOnly = 7;
+}

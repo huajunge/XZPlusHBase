@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "org.urbancomputing.sparkapp.api.service";
+option java_outer_classname = "coverHall";
+
+package location_cover_hall_service;
+
+message CoverHallReq {
+    string resultTable = 1;
+    string hallTable = 2;
+    double coverRadius = 3;
+    string outTable = 4;
+}
+
+message CoverHallResp {
+    bool success = 1;
+}
+
+
+service CoverHallService {
+    rpc coverHall (CoverHallReq) returns (CoverHallResp) {
+    }
+}
