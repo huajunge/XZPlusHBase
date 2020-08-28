@@ -24,7 +24,7 @@ public class RtreeExample {
         try (RtreeHBaseClient hBaseClient = new RtreeHBaseClient(tableR)) {
             Random random = new Random(1000000);
             Random randomLat = new Random(2661497);
-            for (int k = 0; k < 50000; k++) {
+            for (int k = 0; k < 5000; k++) {
                 for (int j = 1; j <= 5; j++) {
                     double offset = random.nextDouble() * 0.5;
                     double offsetLat = randomLat.nextDouble() * 0.5;

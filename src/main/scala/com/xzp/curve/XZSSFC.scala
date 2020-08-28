@@ -1,14 +1,14 @@
 package com.xzp.curve
 
-import com.xzp.curve.XZPlusSFC.{QueryWindow, XElement}
+import java.{lang, util}
+
+import com.xzp.curve.XZSSFC.{QueryWindow, XElement}
 import org.locationtech.sfcurve.IndexRange
 
-import scala.collection.mutable.ArrayBuffer
-
-class XZPlusSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) extends XZ2SFC(g, xBounds, yBounds) {
+class XZSSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) extends XZ2SFC(g, xBounds, yBounds) {
 
 
-  override def index(xmin: Double, ymin: Double, xmax: Double, ymax: Double, lenient: Boolean = false): Long = {
+  def indexPositionCode(xmin: Double, ymin: Double, xmax: Double, ymax: Double, lenient: Boolean = false): (java.lang.Long, java.lang.Long) = {
     // normalize inputs to [0,1]
     val (nxmin, nymin, nxmax, nymax) = normalize(xmin, ymin, xmax, ymax, lenient)
 
@@ -51,7 +51,7 @@ class XZPlusSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) 
       posCode = 4L
     }
     //println(posCode)
-    sequenceCode(nxmin, nymin, length, posCode)
+    (sequenceCode(nxmin, nymin, length), posCode)
   }
 
   def sequenceCode(x: Double, y: Double, length: Int, posCode: Long): Long = {
@@ -131,7 +131,7 @@ class XZPlusSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) 
    * @param query a window to cover in the form (xmin, ymin, xmax, ymax) where: all values are in user space
    * @return
    */
-  override def ranges(query: (Double, Double, Double, Double)): Seq[IndexRange] = ranges(Seq(query))
+  def ranges2(query: (Double, Double, Double, Double)): util.ArrayList[(IndexRange, java.lang.Long, java.lang.Long)] = ranges2(Seq(query))
 
   /**
    * Determine XZ-curve ranges that will cover a given query window
@@ -140,8 +140,9 @@ class XZPlusSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) 
    * @param maxRanges a rough upper limit on the number of ranges to generate
    * @return
    */
-  override def ranges(query: (Double, Double, Double, Double), maxRanges: Option[Int]): Seq[IndexRange] =
-    ranges(Seq(query), maxRanges)
+  def ranges2(query: (Double, Double, Double, Double), maxRanges: Option[Int]): util.ArrayList[(IndexRange,
+    java.lang.Long, java.lang.Long)] =
+    ranges2(Seq(query), maxRanges)
 
   /**
    * Determine XZ-curve ranges that will cover a given query window
@@ -152,8 +153,8 @@ class XZPlusSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) 
    * @param ymax max y value in user space, must be >= ymin
    * @return
    */
-  override def ranges(xmin: Double, ymin: Double, xmax: Double, ymax: Double): Seq[IndexRange] =
-    ranges(Seq((xmin, ymin, xmax, ymax)))
+  def ranges2(xmin: Double, ymin: Double, xmax: Double, ymax: Double): util.ArrayList[(IndexRange, java.lang.Long, java.lang.Long)] =
+    ranges2(Seq((xmin, ymin, xmax, ymax)))
 
   /**
    * Determine XZ-curve ranges that will cover a given query window
@@ -165,8 +166,8 @@ class XZPlusSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) 
    * @param maxRanges a rough upper limit on the number of ranges to generate
    * @return
    */
-  override def ranges(xmin: Double, ymin: Double, xmax: Double, ymax: Double, maxRanges: Option[Int]): Seq[IndexRange] =
-    ranges(Seq((xmin, ymin, xmax, ymax)), maxRanges)
+  def ranges2(xmin: Double, ymin: Double, xmax: Double, ymax: Double, maxRanges: Option[Int]): util.ArrayList[(IndexRange, lang.Long, lang.Long)] =
+    ranges2(Seq((xmin, ymin, xmax, ymax)), maxRanges)
 
   /**
    * Determine XZ-curve ranges that will cover a given query window
@@ -176,13 +177,13 @@ class XZPlusSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) 
    * @param maxRanges a rough upper limit on the number of ranges to generate
    * @return
    */
-  override def ranges(queries: Seq[(Double, Double, Double, Double)], maxRanges: Option[Int] = None): Seq[IndexRange] = {
+  def ranges2(queries: Seq[(Double, Double, Double, Double)], maxRanges: Option[Int] = None): util.ArrayList[(IndexRange, java.lang.Long, java.lang.Long)] = {
     // normalize inputs to [0,1]
     val windows = queries.map { case (xmin, ymin, xmax, ymax) =>
       val (nxmin, nymin, nxmax, nymax) = normalize(xmin, ymin, xmax, ymax, lenient = false)
       QueryWindow(nxmin, nymin, nxmax, nymax)
     }
-    ranges(windows.toArray, maxRanges.getOrElse(Int.MaxValue))
+    ranges2(windows.toArray, maxRanges.getOrElse(Int.MaxValue))
   }
 
   /**
@@ -192,11 +193,11 @@ class XZPlusSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) 
    * @param rangeStop a rough max value for the number of ranges to return
    * @return
    */
-  def ranges(query: Array[QueryWindow], rangeStop: Int): Seq[IndexRange] = {
-    import XZPlusSFC.{LevelOneElements, LevelTerminator}
+  def ranges2(query: Array[QueryWindow], rangeStop: Int): util.ArrayList[(IndexRange, java.lang.Long, java.lang.Long)] = {
+    import XZSSFC.{LevelOneElements, LevelTerminator}
 
     // stores our results - initial size of 100 in general saves us some re-allocation
-    val ranges = new java.util.ArrayList[IndexRange](100)
+    val ranges = new java.util.ArrayList[(IndexRange, java.lang.Long, java.lang.Long)](100)
     var rst = rangeStop * 2
     if (rst < 0) {
       rst = rangeStop
@@ -217,7 +218,7 @@ class XZPlusSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) 
     }
 
     // finding position code
-    def posCode(quad: XElement): Array[Boolean] = {
+    def posCode(quad: XElement) = {
       var i = 0
       val poscode = Array(false, false, false)
       while (i < query.length) {
@@ -237,7 +238,7 @@ class XZPlusSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) 
       poscode
     }
 
-    def posCode2(quad: XElement): Array[Boolean] = {
+    def posCode2(quad: XElement) = {
       var i = 0
       val poscode = Array(false, false, false, false)
       while (i < query.length) {
@@ -278,22 +279,30 @@ class XZPlusSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) 
       if (isContained(quad)) {
         // whole range matches, happy day
         val (min, max) = sequenceInterval(quad.xmin, quad.ymin, level, 1L, partial = false)
-        ranges.add(IndexRange(min, max, contained = true))
+        ranges.add(IndexRange(min, max, contained = true), 0L, 0L)
       } else if (isOverlapped(quad)) {
         // some portion of this range is excluded
         // add the partial match and queue up each sub-range for processing
-        var ps: Array[Boolean] = posCode(quad)
+        var ps = posCode(quad)
         if (level == g) {
           ps = posCode2(quad)
         }
         var i = 1L
+        var si = 1L
+        var ei = 1L
+        var flag = false
         for (elem <- ps) {
+          if (!flag && elem.booleanValue()) {
+            si = i
+            flag = true
+          }
           if (elem.booleanValue()) {
-            val (min, max) = sequenceInterval(quad.xmin, quad.ymin, level, i, partial = true)
-            ranges.add(IndexRange(min, max, contained = false))
+            ei = i
           }
           i += 1L
         }
+        val (min, max) = sequenceInterval(quad.xmin, quad.ymin, level, i, partial = true)
+        ranges.add(IndexRange(min, max, contained = false), si, ei)
         if (level < g) {
           quad.children.foreach(remaining.add)
         }
@@ -319,57 +328,13 @@ class XZPlusSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) 
       }
     }
 
-    //    while (level <= g && !remaining.isEmpty && ranges.size < rst) {
-    //      val next = remaining.poll
-    //      if (next.eq(LevelTerminator)) {
-    //        // we've fully processed a level, increment our state
-    //        if (!remaining.isEmpty) {
-    //          level = (level + 1).toShort
-    //          remaining.add(LevelTerminator)
-    //        }
-    //      } else {
-    //        checkValue(next, level)
-    //      }
-    //    }
-    //
-    //    // bottom out and get all the ranges that partially overlapped but we didn't fully process
-    //    while (!remaining.isEmpty) {
-    //      val quad = remaining.poll
-    //      if (quad.eq(LevelTerminator)) {
-    //        level = (level + 1).toShort
-    //      } else {
-    //        val (min, max) = sequenceInterval(quad.xmin, quad.ymin, level, 1L, partial = false)
-    //        ranges.add(IndexRange(min, max, contained = false))
-    //      }
-    //    }
-
     // we've got all our ranges - now reduce them down by merging overlapping values
     // note: we don't bother reducing the ranges as in the XZ paper, as accumulo handles lots of ranges fairly well
-    ranges.sort(IndexRange.IndexRangeIsOrdered)
-
-    var current = ranges.get(0) // note: should always be at least one range
-    val result = ArrayBuffer.empty[IndexRange]
-    var i = 1
-    while (i < ranges.size()) {
-      val range = ranges.get(i)
-      if (range.lower <= current.upper + 1) {
-        // merge the two ranges
-        current = IndexRange(current.lower, math.max(current.upper, range.upper), current.contained && range.contained)
-      } else {
-        // append the last range and set the current range for future merging
-        result.append(current)
-        current = range
-      }
-      i += 1
-    }
-    // append the last range - there will always be one left that wasn't added
-    result.append(current)
-    //println("xzplus:" + level + "_" + ranges.size() + "_" + result.size)
-    result
+    ranges
   }
 
   private def sequenceInterval(x: Double, y: Double, length: Short, psc: Long, partial: Boolean): (Long, Long) = {
-    val min = sequenceCode(x, y, length, psc)
+    val min = sequenceCode(x, y, length)
     // if a partial match, we just use the single sequence code as an interval
     // if a full match, we have to match all sequence codes starting with the single sequence code
     val max = if (partial) {
@@ -377,13 +342,13 @@ class XZPlusSFC(g: Short, xBounds: (Double, Double), yBounds: (Double, Double)) 
     } else {
       // from lemma 3 in the XZ-Ordering paper
       //min - psc + 3L + (5 * math.pow(4, g - length).toLong - 1)
-      min - psc + (5 * math.pow(4, g - length).toLong - 1)
+      min + (math.pow(4, g - length + 1).toLong - 1L) / 3L
     }
     (min, max)
   }
 }
 
-object XZPlusSFC {
+object XZSSFC {
 
   // the initial level of quads
   private val LevelOneElements = XElement(0.0, 0.0, 1.0, 1.0, 1.0).children
@@ -391,12 +356,12 @@ object XZPlusSFC {
   // indicator that we have searched a full level of the quad/oct tree
   private val LevelTerminator = XElement(-1.0, -1.0, -1.0, -1.0, 0)
 
-  private val cache = new java.util.concurrent.ConcurrentHashMap[Short, XZPlusSFC]()
+  private val cache = new java.util.concurrent.ConcurrentHashMap[Short, XZSSFC]()
 
-  def apply(g: Short): XZPlusSFC = {
+  def apply(g: Short): XZSSFC = {
     var sfc = cache.get(g)
     if (sfc == null) {
-      sfc = new XZPlusSFC(g, (-180.0, 180.0), (-90.0, 90.0))
+      sfc = new XZSSFC(g, (-180.0, 180.0), (-90.0, 90.0))
       cache.put(g, sfc)
     }
     sfc

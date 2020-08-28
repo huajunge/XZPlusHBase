@@ -17,12 +17,12 @@ import org.apache.hadoop.hbase.io.compress.Compression;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Polygon;
 import rx.Observable;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -58,6 +58,10 @@ public class RtreeHBaseClient implements AbstractClient, Closeable {
         this.rTree = RTree.create();
     }
 
+    public RTree<String, Rectangle> getrTree() {
+        return rTree;
+    }
+
     @Override
     public void create() throws IOException {
         HTableDescriptor table = new HTableDescriptor(TableName.valueOf(tableName));
@@ -65,7 +69,7 @@ public class RtreeHBaseClient implements AbstractClient, Closeable {
             admin.disableTable(table.getTableName());
             admin.deleteTable(table.getTableName());
         }
-        table.addFamily(new HColumnDescriptor(DEFAULT_CF).setCompressionType(Compression.Algorithm.GZ));
+        table.addFamily(new HColumnDescriptor(DEFAULT_CF).setCompressionType(Compression.Algorithm.SNAPPY));
         admin.createTable(table);
     }
 
@@ -112,34 +116,31 @@ public class RtreeHBaseClient implements AbstractClient, Closeable {
     public List<Result> rangeQuery(Double minLng, Double minLat, Double maxLng, Double maxLat) throws IOException, InterruptedException {
         //Iterator<Iterable<IndexRange>> rs = this.sfc.ranges(minLng, minLat, maxLng, maxLat).sliding(10, 10);
         //System.out.println("range size:"+rss.size());
+        long time = System.currentTimeMillis();
         MinimumBoundingBox mbr = new MinimumBoundingBox(minLng, minLat, maxLng, maxLat);
         Observable<Entry<String, Rectangle>> result = this.rTree.search(Geometries.rectangleGeographic(mbr.getMinX(),
                 mbr.getMinY(), mbr.getMaxX(), mbr.getMaxY()));
         final List<Result> resultList = new ArrayList<>();
-        long time = System.currentTimeMillis();
         int size = 0;
-        int rangeSize = 0;
         int QueryBatch = 10000;
         List<Get> gets = new ArrayList<>();
         for (Entry<String, Rectangle> e : result.toBlocking().toIterable()) {
             gets.add(new Get(Bytes.toBytes(e.value())));
             size++;
         }
-        System.out.println("索引时间:"+ (System.currentTimeMillis() - time));
-        time = System.currentTimeMillis();
+        long indexTime = (System.currentTimeMillis() - time);
+        //time = System.currentTimeMillis();
         Result[] results = hTable.get(gets);
-        Polygon polygon = mbr.toPolygon(4326);
-        for (Result result1 : results) {
-            Geometry geo = WKTUtils.read(Bytes.toString(result1.getValue(Bytes.toBytes(DEFAULT_CF), Bytes.toBytes(DEFAULT_COL))));
-            if (geo.intersects(polygon)) {
-                resultList.add(result1);
-            }
-            //resultList.add(res);
-        }
-        System.out.println(System.currentTimeMillis() - time);
-        System.out.println("size:" + size);
-        System.out.println("rang size:" + rangeSize);
-        return resultList;
+//        Polygon polygon = mbr.toPolygon(4326);
+//        for (Result result1 : results) {
+////            Geometry geo = WKTUtils.read(Bytes.toString(result1.getValue(Bytes.toBytes(DEFAULT_CF), Bytes.toBytes(DEFAULT_COL))));
+////            if (geo.intersects(polygon)) {
+////                resultList.add(result1);
+////            }
+//            resultList.add(result1);
+//        }
+        System.out.println(indexTime + "    " + (System.currentTimeMillis() - time) + "    " + size);
+        return Arrays.asList(results);
     }
 
 
