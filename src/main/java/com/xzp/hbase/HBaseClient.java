@@ -162,6 +162,12 @@ public class HBaseClient implements AbstractClient, Closeable {
             this.putCache = new ArrayList<>(BATCH_SIZE);
         }
         this.putCache.add(getPut(id, geom, value));
+        putSize++;
+        if (putSize == BATCH_SIZE) {
+            hTable.put(this.putCache);
+            this.putCache.clear();
+            putSize = 0;
+        }
     }
 
     public void finishBatchPut() throws IOException {
@@ -298,7 +304,7 @@ public class HBaseClient implements AbstractClient, Closeable {
                 resultScanner.close();
             }
         }
-        if(printLogs) {
+        if (printLogs) {
             System.out.println(String.format("%s    %s    %s  %s  %s", indexTime, System.currentTimeMillis() - time, totalSize.get(), size.get(), rangeSize.get()));
         }
         return resultList;
@@ -375,7 +381,7 @@ public class HBaseClient implements AbstractClient, Closeable {
 
         singleThreadPool.shutdown();
         singleThreadPool.awaitTermination(3, TimeUnit.SECONDS);
-        if(printLogs) {
+        if (printLogs) {
             System.out.println(String.format("%s    %s    %s  %s  %s", indexTime, System.currentTimeMillis() - time, totalSize.get(), size.get(), rangeSize.get()));
         }
 //        System.out.println(System.currentTimeMillis() - time);

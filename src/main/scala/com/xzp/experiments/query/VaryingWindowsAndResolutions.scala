@@ -18,10 +18,13 @@ object VaryingWindowsAndResolutions {
     //    var minLat: Double = 39.92818
     //    var maxLon: Double = 116.35057
     //    var maxLat: Double = 39.93318
-    val interval: Double = 0.01
+    var interval: Double = 0.01
+    if (args.length == 5) {
+      interval = args(4).toDouble
+    }
     val offset: Double = 0.01
     val c: HBaseClient = new HBaseClient(tablexzp + "_", 16.toShort, XZPlusSFC.apply(16))
-
+    c.setPrintLogs(false)
     for (i <- sPrecision to ePrecision) {
       val xzPlusSFC: XZPlusSFC = XZPlusSFC.apply(i.toShort);
       val xzpClient: HBaseClient = new HBaseClient(tablexzp + "_" + i, i.toShort, xzPlusSFC);

@@ -20,7 +20,10 @@ object VaryingWindows {
     //    var minLat: Double = 39.92818
     //    var maxLon: Double = 116.35057
     //    var maxLat: Double = 39.93318
-    val interval: Double = 0.01
+    var interval: Double = 0.01
+    if (args.length == 7) {
+      interval = args(6).toDouble
+    }
     var offset: Double = 0.01
     val xzPlusSFC: XZPlusSFC = XZPlusSFC.apply(precision)
     val xz2SFC: XZ2SFC = XZ2SFC.apply(precision)

@@ -25,6 +25,7 @@ object VaryingResolutions {
     val offset: Double = 0.01
     val c: HBaseClient = new HBaseClient(tablexz + "_", 16.toShort, XZ2SFC.apply(16));
     c.setPrintLogs(false)
+    query(c, minLon, minLat, 0.0001, offset)
     for (i <- sPrecision to ePrecision) {
       val xzPlusSFC: XZPlusSFC = XZPlusSFC.apply(i.toShort)
       val xz2SFC: XZ2SFC = XZ2SFC.apply(i.toShort)
@@ -40,7 +41,6 @@ object VaryingResolutions {
       xzbClient.setPrintLogs(true)
       println(s"---Precision:$i----")
       println(s"---xz2:$i----")
-      query(c, minLon, minLat, 0.0001, offset)
       query(xzClient, minLon, minLat, interval * 5, offset)
       println(s"---xzs:$i----")
       squery(xzsClient, minLon, minLat, interval * 5, offset)
