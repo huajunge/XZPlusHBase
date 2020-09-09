@@ -21,8 +21,14 @@ object VaryingResolutions {
     //    var minLat: Double = 39.92818
     //    var maxLon: Double = 116.35057
     //    var maxLat: Double = 39.93318
-    val interval: Double = 0.01
-    val offset: Double = 0.01
+    var interval: Double = 0.01
+    if (args.length == 8) {
+      interval = args(7).toDouble
+    }
+    var offset: Double = 0.01
+    if (args.length == 9) {
+      offset = args(8).toDouble
+    }
     val c: HBaseClient = new HBaseClient(tablexz + "_", 16.toShort, XZ2SFC.apply(16));
     c.setPrintLogs(false)
     query(c, minLon, minLat, 0.0001, offset)
@@ -39,7 +45,7 @@ object VaryingResolutions {
       xzsClient.setPrintLogs(true)
       xzpClient.setPrintLogs(true)
       xzbClient.setPrintLogs(true)
-      println(s"---Precision:$i----")
+      //println(s"---Precision:$i----")
       println(s"---xz2:$i----")
       query(xzClient, minLon, minLat, interval * 5, offset)
       println(s"---xzs:$i----")
@@ -48,7 +54,7 @@ object VaryingResolutions {
       query(xzpClient, minLon, minLat, interval * 5, offset)
       println(s"---xzb:$i----")
       query(xzbClient, minLon, minLat, interval * 5, offset)
-      println("|||||||||||||||")
+      //println("|||||||||||||||")
       xzClient.close()
       xzsClient.close()
       xzpClient.close()

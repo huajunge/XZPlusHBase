@@ -305,7 +305,7 @@ public class HBaseClient implements AbstractClient, Closeable {
             }
         }
         if (printLogs) {
-            System.out.println(String.format("%s    %s    %s  %s  %s", indexTime, System.currentTimeMillis() - time, totalSize.get(), size.get(), rangeSize.get()));
+            System.out.println(String.format("%s,%s,%s,%s,%s", indexTime, System.currentTimeMillis() - time, totalSize.get(), size.get(), rangeSize.get()));
         }
         return resultList;
     }
@@ -377,12 +377,10 @@ public class HBaseClient implements AbstractClient, Closeable {
                 }
             });
         }
-
-
         singleThreadPool.shutdown();
         singleThreadPool.awaitTermination(3, TimeUnit.SECONDS);
         if (printLogs) {
-            System.out.println(String.format("%s    %s    %s  %s  %s", indexTime, System.currentTimeMillis() - time, totalSize.get(), size.get(), rangeSize.get()));
+            System.out.println(String.format("%s,%s,%s,%s,%s", indexTime, System.currentTimeMillis() - time, totalSize.get(), size.get(), rangeSize.get()));
         }
 //        System.out.println(System.currentTimeMillis() - time);
 //        System.out.println("query size:" + totalSize.get());

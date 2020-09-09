@@ -25,6 +25,9 @@ object VaryingWindows {
       interval = args(6).toDouble
     }
     var offset: Double = 0.01
+    if (args.length == 8) {
+      offset = args(7).toDouble
+    }
     val xzPlusSFC: XZPlusSFC = XZPlusSFC.apply(precision)
     val xz2SFC: XZ2SFC = XZ2SFC.apply(precision)
     val hb: HBPlusSFC = HBPlusSFC.apply(precision)

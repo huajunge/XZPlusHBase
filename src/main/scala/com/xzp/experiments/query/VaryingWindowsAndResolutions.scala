@@ -22,7 +22,10 @@ object VaryingWindowsAndResolutions {
     if (args.length == 5) {
       interval = args(4).toDouble
     }
-    val offset: Double = 0.01
+    var offset: Double = 0.01
+    if (args.length == 6) {
+      offset = args(5).toDouble
+    }
     val c: HBaseClient = new HBaseClient(tablexzp + "_", 16.toShort, XZPlusSFC.apply(16))
     c.setPrintLogs(false)
     for (i <- sPrecision to ePrecision) {
