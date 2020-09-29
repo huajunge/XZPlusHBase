@@ -36,6 +36,7 @@ object VaryingWindowsAndResolutions {
       for (j <- 1 to 10) {
         println(s"---window:$j----")
         query(xzpClient, minLon, minLat, interval * j, offset)
+        Thread.sleep(100)
       }
       xzpClient.close()
     }

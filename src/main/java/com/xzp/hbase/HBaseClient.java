@@ -48,7 +48,7 @@ public class HBaseClient implements AbstractClient, Closeable {
     private static Short P = 16;
     private static Short shard = 4;
     private XZ2SFC sfc;
-    private int BATCH_SIZE = 10000;
+    private int BATCH_SIZE = 100001;
     private List<Put> putCache;
     private int putSize = 0;
     private Connection connection;

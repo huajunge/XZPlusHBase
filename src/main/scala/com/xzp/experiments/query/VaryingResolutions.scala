@@ -48,10 +48,13 @@ object VaryingResolutions {
       //println(s"---Precision:$i----")
       println(s"---xz2:$i----")
       query(xzClient, minLon, minLat, interval * 5, offset)
+      Thread.sleep(100)
       println(s"---xzs:$i----")
       squery(xzsClient, minLon, minLat, interval * 5, offset)
+      Thread.sleep(100)
       println(s"---xzp:$i----")
       query(xzpClient, minLon, minLat, interval * 5, offset)
+      Thread.sleep(100)
       println(s"---xzb:$i----")
       query(xzbClient, minLon, minLat, interval * 5, offset)
       //println("|||||||||||||||")
@@ -59,6 +62,7 @@ object VaryingResolutions {
       xzsClient.close()
       xzpClient.close()
       xzbClient.close()
+      Thread.sleep(100)
     }
     c.close()
   }

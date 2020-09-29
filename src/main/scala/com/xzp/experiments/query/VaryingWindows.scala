@@ -43,12 +43,16 @@ object VaryingWindows {
     for (i <- 1 to 10) {
       println(s"---xz2:$i----")
       query(xzClient, minLon, minLat, interval * i, offset)
+      Thread.sleep(100)
       println(s"---xzs:$i----")
       squery(xzsClient, minLon, minLat, interval * i, offset)
+      Thread.sleep(100)
       println(s"---xzp:$i----")
       query(xzpClient, minLon, minLat, interval * i, offset)
+      Thread.sleep(100)
       println(s"---xzb:$i----")
       query(xzbClient, minLon, minLat, interval * i, offset)
+      Thread.sleep(100)
     }
     xzClient.close()
     xzsClient.close()
