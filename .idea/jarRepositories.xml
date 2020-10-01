@@ -2,19 +2,14 @@
 <project version="4">
   <component name="RemoteRepositoriesConfiguration">
     <remote-repository>
-      <option name="id" value="libs-snapshots" />
-      <option name="name" value="libs-snapshots" />
-      <option name="url" value="http://artifactory.jd.com/libs-snapshots-local" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="repo1" />
-      <option name="name" value="repo1" />
-      <option name="url" value="http://repo1.maven.org/maven2" />
-    </remote-repository>
-    <remote-repository>
       <option name="id" value="locationtech-releases" />
       <option name="name" value="locationtech-releases" />
       <option name="url" value="https://repo.locationtech.org/content/groups/releases" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="https://repo.maven.apache.org/maven2" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="JBOSS" />
@@ -27,14 +22,19 @@
       <option name="url" value="https://repo1.maven.org/maven2" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Repository Switchboard" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="boundlessgeo" />
       <option name="name" value="boundlessgeo" />
       <option name="url" value="https://repo.boundlessgeo.com/main" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="jboss.community" />
-      <option name="name" value="JBoss Community repository" />
-      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+      <option name="id" value="repo1" />
+      <option name="name" value="repo1" />
+      <option name="url" value="http://repo1.maven.org/maven2" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="WangYinNexus" />
@@ -42,24 +42,24 @@
       <option name="url" value="http://nexus.cbpmgt.com/nexus/content/groups/public" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="confluent" />
+      <option name="name" value="confluent" />
+      <option name="url" value="https://packages.confluent.io/maven/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="libs-releases" />
       <option name="name" value="libs-releases" />
       <option name="url" value="http://artifactory.jd.com/libs-releases-local" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="central" />
-      <option name="name" value="Central Repository" />
-      <option name="url" value="https://repo.maven.apache.org/maven2" />
+      <option name="id" value="libs-snapshots" />
+      <option name="name" value="libs-snapshots" />
+      <option name="url" value="http://artifactory.jd.com/libs-snapshots-local" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="central" />
-      <option name="name" value="Maven Repository Switchboard" />
-      <option name="url" value="https://repo1.maven.org/maven2" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="confluent" />
-      <option name="name" value="confluent" />
-      <option name="url" value="https://packages.confluent.io/maven/" />
+      <option name="id" value="locationtech-snapshots" />
+      <option name="name" value="locationtech-snapshots" />
+      <option name="url" value="https://repo.locationtech.org/content/groups/snapshots" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="osgeo" />
@@ -67,9 +67,9 @@
       <option name="url" value="https://download.osgeo.org/webdav/geotools" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="locationtech-snapshots" />
-      <option name="name" value="locationtech-snapshots" />
-      <option name="url" value="https://repo.locationtech.org/content/groups/snapshots" />
+      <option name="id" value="jboss.community" />
+      <option name="name" value="JBoss Community repository" />
+      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
     </remote-repository>
   </component>
 </project>

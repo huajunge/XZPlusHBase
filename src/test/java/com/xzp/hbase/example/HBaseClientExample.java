@@ -55,52 +55,6 @@ public class HBaseClientExample {
                 e.printStackTrace();
             }
         }
-//
-//        try (HBaseClient hBaseClient = new HBaseClient(tableXZB, (short) 16, hilbertSFC)) {
-////            Random random = new Random(1000000);
-////            Random randomLat = new Random(2661497);
-////            for (int k = 0; k < 50000; k++) {
-////                for (int j = 1; j <= 5; j++) {
-////                    double offset = random.nextDouble() * 0.5;
-////                    double offsetLat = randomLat.nextDouble() * 0.5;
-////                    //System.out.println(String.format("%s_%s", offset, m));
-////                    MinimumBoundingBox mbr2 = new MinimumBoundingBox(lon + offset, lat + offsetLat, lon + offset + j * 0.005, lat + offsetLat + j * 0.005);
-////                    //System.out.println(String.format("%s", mbr2.toPolygon(4326).toText()));
-////                    hBaseClient.batchInsert((k * 5 + j) + "", mbr2.toPolygon(4326).toText(), mbr2.toPolygon(4326).toText());
-////                }
-////            }
-////            hBaseClient.finishBatchPut();
-//            long time = System.currentTimeMillis();
-//            List<Result> resultList = hBaseClient.rangeQuery(106.64618, 26.60497, 106.69118, 26.64997);
-//            System.out.println(resultList.size());
-//            System.out.println(System.currentTimeMillis() - time);
-//            System.out.println("----------");
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        try (HBaseClient hBaseClient = new HBaseClient(tableXZP, (short) 16, xzPlusSFC)) {
-////            Random random = new Random(1000000);
-////            Random randomLat = new Random(2661497);
-////            for (int k = 0; k < 50000; k++) {
-////                for (int j = 1; j <= 5; j++) {
-////                    double offset = random.nextDouble() * 0.5;
-////                    double offsetLat = randomLat.nextDouble() * 0.5;
-////                    //System.out.println(String.format("%s_%s", offset, m));
-////                    MinimumBoundingBox mbr2 = new MinimumBoundingBox(lon + offset, lat + offsetLat, lon + offset + j * 0.005, lat + offsetLat + j * 0.005);
-////                    //System.out.println(String.format("%s", mbr2.toPolygon(4326).toText()));
-////                    hBaseClient.batchInsert((k * 5 + j) + "", mbr2.toPolygon(4326).toText(), mbr2.toPolygon(4326).toText());
-////                }
-////            }
-////            hBaseClient.finishBatchPut();
-//            long time = System.currentTimeMillis();
-//            List<Result> resultList = hBaseClient.rangeQuery(106.64618, 26.60497, 106.69118, 26.64997);
-//            System.out.println(resultList.size());
-//            System.out.println(System.currentTimeMillis() - time);
-//            System.out.println("----------");
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
 
         try (HBaseClient hBaseClient = new HBaseClient(tableXZS, (short) 16, xzPlusSFC)) {
             Random random = new Random(1000000);
@@ -122,7 +76,5 @@ public class HBaseClientExample {
             System.out.println(System.currentTimeMillis() - time);
             System.out.println("----------");
         }
-        //pipelined.sync();
-        //pipelined.close();
     }
 }
