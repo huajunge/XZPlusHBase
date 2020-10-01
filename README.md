@@ -121,7 +121,7 @@ public class HBaseClientExample {
 
 java -cp  XZ_HBase-1.0-SNAPSHOT-jar-with-dependencies.jar com.xzp.experiments.storage.RoadNetworkStorage "beijing_rn" bj_xz bj_xzp bj_hb bj_xzs 12 17 false	
 ### Storing US polygons
-java -cp  XZ_HBase-1.0-SNAPSHOT-jar-with-dependencies.jar com.xzp.experiments.storage.USPolygonsStorage "beijing_rn" us_xz us_xzp us_hb us_xzs 12 17 false
+java -cp  XZ_HBase-1.0-SNAPSHOT-jar-with-dependencies.jar com.xzp.experiments.storage.USPolygonsStorage "us_polygons" us_xz us_xzp us_hb us_xzs 12 17 false
 ### RandomXZ
 java -cp  XZ_HBase-1.0-SNAPSHOT-jar-with-dependencies.jar com.xzp.experiments.storage.RandomXZ		
 ### RandomStorge
